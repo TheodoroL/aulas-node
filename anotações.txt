@@ -1,0 +1,19 @@
+--------- Sobre Rotas -------
+    -Criar usuários 
+    -listagem de usuários
+    -Edição de usuários
+    -Remoção de usuários
+------------------------------
+
+----- HTTP ---- 
+    -Método HTTP: GET, POST, PUT,PATCH,  DELETE
+    ------------------------------------------
+        -GET: Buscar uma informação no back-end
+        -POST: Criar uma informação no back-end
+        -PUT: atualizar um recurso bo back-end
+        -PATCH: atualizar uma informação especifica de um recurso no back-end 
+        -DELETE: deletar algum recurso no back-end
+    ------------------------------------------
+    
+    -URL 
+
