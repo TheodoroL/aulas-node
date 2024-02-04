@@ -15,5 +15,8 @@
         -DELETE: deletar algum recurso no back-end
     ------------------------------------------
     
-    -URL 
-
+    -URL
+    - Stateful & Statelees 
+        -Stateful : basicamente é armazenar na memória os dados da aplicação
+        - Statelees: armazena os dados da aplicação em um banco de dados
+    //Cabeçalhos (Requisição/Resposta)=> Metadados
