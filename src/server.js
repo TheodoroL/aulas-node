@@ -1,27 +1,17 @@
 import http from 'node:http'; 
+import { json } from './middlewares/json.js';
 //lista de usuários
 const users = []; 
 
 //primeiro servidor http
 const server =  http.createServer(async(req, res)=>{
-    const buffer = [];
-    for await(const chunk of req){
-        buffer.push(chunk); 
-    }
-    //vai converter o buffer de uma string para um json
-    try{
-
-        req.body = JSON.parse(Buffer.concat(buffer).toString()); 
-    }catch{
-        req.body = null
-    }
-   
-    
     const {method, url}= req
+
+   await json(req,res);
+
     if(method == "GET" && url =="/users"){
         return res
         //vaicriar um Cabeçalhos 
-        .setHeader("Content-type", "application/json")
         .end(JSON.stringify(users)); 
     }
     if(method == "POST" && url== "/users"){
