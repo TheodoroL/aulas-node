@@ -14,9 +14,9 @@
 // process.stdin
 // .pipe(process.stdout) // tudo que eu estou recebendo como entrada, estou caminhando(com o pipe) para saida
 
-import {Readable}from'stream'; 
+import {Readable, Writable, Transform}from'stream'; 
 
-//criando Readable do zero
+//Stream de Leitura
 class OneToHundredStream extends Readable{
     index = 1;
     _read(){
@@ -44,5 +44,31 @@ class OneToHundredStream extends Readable{
         
     }
 }
+//Stream Transformação de dados
+class InverseNumberStream extends Transform{
+    _transform(chunk, enconde, callback){
+        const transformed = Number(chunk.toString())*-1;
+        
+        //callback(o erro, e os dados convertido) obs: quando for colocar null na parte do erro, você está dizendo que não avera nenhum erro
+        callback(null, Buffer.from(String(transformed))); 
 
-new OneToHundredStream().pipe(process.stdout)
+    }
+}
+//Stream de Escrita
+class MultplyByTenStream extends Writable{
+    /* 
+        -chunk : é o pedaço que nós leu do Readable
+        - enconde: é como esse dado está codificado 
+        - callback: é uma função de stream de escrita terminou o que ele precisava 
+    */
+    _write(chunk, enconde, callback){
+        console.log(Number(chunk.toString())*10); 
+        callback(); 
+    }
+}
+//estou lendo um dado 
+new OneToHundredStream()
+//estou transformando um número positivo para negativo
+.pipe(new InverseNumberStream())
+// estou escrevendo dados
+.pipe(new MultplyByTenStream())
