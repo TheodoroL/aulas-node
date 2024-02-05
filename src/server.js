@@ -18,11 +18,12 @@ const server =  http.createServer((req, res)=>{
             nome: "Lucas", 
             email : "teste1234@gmail.com",
         })
-        return res.end("Criação de usuários"); 
+        // vai enviar que o status é 201, obs : nós retorna sempre quando algo é criado na aplicação do back end
+        return res.writeHead(201).end(); 
     }
 
-    //vai escrever ola mundo
-    return res.end("hello word"); 
+    //se não existir rotas criada, vai retonar 404
+    return res.writeHead(404).end(); 
 })
 //porta do servidor 
 server.listen(3333)
