@@ -4,7 +4,7 @@ class OneToHundredStream extends Readable{
     _read(){
         const i = this.index++; 
         setTimeout(()=>{
-        if(i > 100){
+        if(i > 5){
             this.push(null); 
         }
         else{
@@ -22,4 +22,9 @@ fetch("http://localhost:3334", {
     //para dar certo a request, tive que colocar esse duplex com half
     "duplex": "half"
 
+})//vai pegar o response que o backend mandou para mim
+.then(res=>{
+    res.text().then(data=>{
+        console.log(data)
+    })
 })
