@@ -1,33 +1,23 @@
 import http from 'node:http'; 
 import { json } from './middlewares/json.js';
-import { Database } from './database.js';
-import {randomUUID} from 'node:crypto'; 
-const database = new Database(); 
+import { routes } from './routes.js';
 
 const server =  http.createServer(async(req, res)=>{
     const {method, url}= req
 
    await json(req,res);
 
-    if(method == "GET" && url =="/users"){
-        const users = database.select("users"); 
-        return res
-        .end(JSON.stringify(users)); 
-    }
-    if(method == "POST" && url== "/users"){
+    const route = routes.find(route=>{
+        return route.method === method && route.path === url;  
 
-        const {nome, email} = req.body; 
-        //criando ID unico para nosso clientes
-        const users={
-            id : randomUUID(), 
-            nome, 
-            email
-        }
+    })
+    //vai verificar se as rotas existe, se existir vai executar a função handler, se não vai retornar 404
+    if(route){
+        route.handler(req, res); 
+    }else{
+        return res.writeHead(404).end(); 
 
-        database.insert('users', users); 
-        return res.writeHead(201).end("usuario criado com sucesso"); 
     }
 
-    return res.writeHead(404).end(); 
 })
 server.listen(3333)
