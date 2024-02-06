@@ -1,21 +1,33 @@
+import fs from 'node:fs/promises'; 
+//vai pegar o path.json 
+const databasePath = new URL("../db.json", import.meta.url); 
 
 export class Database{
-    //variavel privado 
     #database = {};
-    // vai mostrar data do "banco de dados"    
+    //vai tentar ler o arquivo db.json, se der erro ele vai criar o db.json vazio 
+    constructor(){
+        fs.readFile(databasePath, 'utf-8').then(data=>{
+            this.#database = JSON.parse(data); 
+        }).catch(()=>{
+            this.#persist(); 
+        })
+    }
+    //vai escrever no arquivo db.json o que tiver no #database
+    #persist(){
+        fs.writeFile(databasePath, JSON.stringify(this.#database)); 
+    }
+
     select(table){
-        // se existir essa tabela, ele vai mostrar, se não vai mandar uma array vazia
         const data = this.#database[table] ?? []; 
         return data;  
     }
     insert(table, data){
-        //vai veficar existe uma tabela com esse nome, se existir vai adicionar o data
         if(Array.isArray(this.#database[table])){
             this.#database[table].push(data); 
         }else{
-            //se não vai criar essa tabela com o data 
             this.#database[table] = [data]; 
         }
+        this.#persist(); 
         return data; 
     }
 }
