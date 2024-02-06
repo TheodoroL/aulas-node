@@ -20,7 +20,7 @@ const server =  http.createServer(async(req, res)=>{
     })
     if(route){
         const routesParams = req.url.match(route.path)
-        console.log(routesParams)
+        req.params = {... routesParams.groups}
         route.handler(req, res); 
     }else{
         return res.writeHead(404).end(); 
