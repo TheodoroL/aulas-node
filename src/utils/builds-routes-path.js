@@ -1,8 +1,20 @@
 
 //user/:id
 export function buildRoutesPath(path){
-    // Regex é uma expressão regular
-    // O que é uma expressão regular ? basicamente é uma forma de encontrar textos segue um formato especifico 
-    const routeParametersRegex = /:([a-zA-Z]+)/g; //cria uma RegExd de forma global do A até Z do  maiusculo para minusculo depois dos dois pontos, exemplo:(:id)
-    console.log(Array.from(path.matchAll(routeParametersRegex))); 
+    const routeParametersRegex = /:([a-zA-Z]+)/g;
+    /*para nomear os dados de uma regex. você precisa colocar ?<nome da sua regex>, exemplo: 
+
+    (?<id>[a-z0-9])
+
+    mas se você quiser pegar outros campos, exemplo:
+        http://localhost/:id/:teste    
+     basta coloca seguinte 
+    (?<$1>[a-z0-9])
+    
+    */
+    const pathWithParams = path.replaceAll(routeParametersRegex, '(?<$1>[a-z0-9\-_]+)'); 
+    console.log(pathWithParams)
+    const pathRegEx = new RegExp(`^${pathWithParams}`)
+    
+    return pathRegEx; 
 }
