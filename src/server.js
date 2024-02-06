@@ -1,7 +1,8 @@
 import http from 'node:http'; 
 import { json } from './middlewares/json.js';
+import { Database } from './database.js';
 //lista de usuários
-const users = []; 
+const database = new Database(); 
 
 //primeiro servidor http
 const server =  http.createServer(async(req, res)=>{
@@ -10,17 +11,20 @@ const server =  http.createServer(async(req, res)=>{
    await json(req,res);
 
     if(method == "GET" && url =="/users"){
+        const users = database.select("users"); 
         return res
-        //vaicriar um Cabeçalhos 
+        //vai criar um Cabeçalhos 
         .end(JSON.stringify(users)); 
     }
     if(method == "POST" && url== "/users"){
 
         const {nome, email} = req.body; 
-        users.push({
+        const users={
             nome, 
             email
-        })
+        }
+
+        database.insert('users', users); 
         // vai enviar que o status é 201, obs : nós retorna sempre quando algo é criado na aplicação do back end
         return res.writeHead(201).end("usuario criado com sucesso"); 
     }
