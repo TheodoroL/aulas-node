@@ -9,8 +9,15 @@ export const routes = [
         method: "GET", 
         path:buildRoutesPath( "/users"), 
         handler: (req, res)=>{
-            console.log(req.query)
-            const users = database.select("users"); 
+
+            const {search} = req.query; 
+
+            console.log(search)
+            //se tiver um search, ele vai dar um objeto com o nome e emeail como search, senão vai retornar null
+            const users = database.select("users",search?{
+                nome: search, 
+                email:search
+            }:null); 
             return res
             .end(JSON.stringify(users)); 
         }
