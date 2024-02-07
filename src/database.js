@@ -31,12 +31,19 @@ export class Database{
         return data; 
     }
 
-    //criando o delete
     delete(table, id){
-        //vai percorrer no meu banco de dados e verificar se existe o id dentro dele
         const rowIndex = this.#database[table].findIndex(row=> row.id == id);
         if(rowIndex >-1){
             this.#database[table].splice(rowIndex, 1); 
+            this.#persist();
+
+        } 
+    }
+    //vai atualizar os dados 
+    update(table, id, data){
+        const rowIndex = this.#database[table].findIndex(row=> row.id == id);
+        if(rowIndex >-1){
+            this.#database[table][rowIndex] = {id, ...data}; 
             this.#persist();
 
         } 
