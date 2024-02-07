@@ -1,6 +1,7 @@
 import http from 'node:http'; 
 import { json } from './middlewares/json.js';
 import { routes } from './routes.js';
+import { extracQueryParams } from './utils/Extrac-Query-Params.js';
 
 
 //Query Parameters:URL Stateful => Filtros, paginação, não-obrigatórios
@@ -20,7 +21,11 @@ const server =  http.createServer(async(req, res)=>{
     })
     if(route){
         const routesParams = req.url.match(route.path)
-        req.params = {... routesParams.groups}
+        // va separar os query e os params 
+        const {query, ...params} = routesParams.groups; 
+        req.params = params;
+        //vai verificar se query está vazio ou não, se tiver ele vai retornar um objeto vazio    
+        req.query  = query ? extracQueryParams(query):{}; 
         route.handler(req, res); 
     }else{
         return res.writeHead(404).end(); 
